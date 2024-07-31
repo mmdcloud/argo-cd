@@ -8,7 +8,8 @@ spec:
   rules:
   - http:
       paths:
-      - path: /demo
+      - path: /
+        pathType: Prefix
         backend:
           serviceName: nodeapp
           servicePort: 80
