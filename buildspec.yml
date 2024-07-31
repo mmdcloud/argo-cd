@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Installing NPM dependencies...
+      - npm install
+  # build:
+  #   commands:
+  #     - echo Build started on `date`
+  #     - npm run build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing Docker image...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - docker build -t my-nodejs-app .
+      - docker tag my-nodejs-app:latest <account_id>.dkr.ecr.<region>.amazonaws.com/my-nodejs-app:latest
+      - docker push <account_id>.dkr.ecr.<region>.amazonaws.com/my-nodejs-app:latest
+      - echo Creating imagedefinitions.json file...
+      - printf '[{"name":"my-container","imageUri":"%s.dkr.ecr.%s.amazonaws.com/my-nodejs-app:latest"}]' $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
