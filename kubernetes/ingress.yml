@@ -5,11 +5,14 @@ metadata:
   annotations:
     ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nodeapp
   rules:
   - http:
       paths:
       - path: /
         pathType: Prefix
         backend:
-          serviceName: nodeapp
-          servicePort: 80
+          service:
+            name: test
+            port:
+              number: 80
