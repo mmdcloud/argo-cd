@@ -6,7 +6,7 @@ metadata:
     run: nodeapp
 spec:
   ports:
-  - port: 81
+  - port: 83
     protocol: TCP
   selector:
     run: nodeapp
